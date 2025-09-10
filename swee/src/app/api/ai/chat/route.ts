@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { prisma } from '@/lib/prisma';
-import { aiAssistant, AIMessage } from '@/services/aiAssistant';
+import { aiAssistant } from '@/services/aiAssistant';
 
 // Helper functions
 function getMostBookedCategory(bookings: any[]): string {
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Get proactive suggestions
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession();
     

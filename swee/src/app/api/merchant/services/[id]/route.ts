@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { prisma } from '@/lib/prisma';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     const session = await getServerSession(authOptions);
     
     if (!session || session.user?.role !== 'MERCHANT') {
@@ -28,7 +29,7 @@ export async function PUT(
       );
     }
 
-    const { id } = await params;
+    const { id } = resolvedParams;
     const serviceId = parseInt(id);
     const body = await request.json();
     const { title, description, price, duration, category, isActive } = body;
@@ -72,9 +73,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     const session = await getServerSession(authOptions);
     
     if (!session || session.user?.role !== 'MERCHANT') {
@@ -95,7 +97,7 @@ export async function DELETE(
       );
     }
 
-    const { id } = await params;
+    const { id } = resolvedParams;
     const serviceId = parseInt(id);
 
     // Verify service belongs to merchant

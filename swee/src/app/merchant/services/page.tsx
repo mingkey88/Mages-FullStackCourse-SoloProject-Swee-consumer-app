@@ -39,7 +39,7 @@ export default function MerchantServices() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
-  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [_editingService, _setEditingService] = useState<Service | null>(null);
   const [newService, setNewService] = useState({
     title: '',
     description: '',
@@ -59,7 +59,7 @@ export default function MerchantServices() {
   useEffect(() => {
     if (status === 'loading') return;
     
-    if (!session || session.user?.role !== 'MERCHANT') {
+    if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
       router.push('/merchant/auth/signin');
       return;
     }
@@ -78,7 +78,7 @@ export default function MerchantServices() {
 
       const data = await response.json();
       setServices(data);
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to load services');
     } finally {
       setLoading(false);
@@ -111,7 +111,7 @@ export default function MerchantServices() {
       setNewService({ title: '', description: '', price: '', duration: '', category: 'BEAUTY' });
       setShowAddForm(false);
       fetchServices();
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to add service. Please try again.');
     }
   };
@@ -133,7 +133,7 @@ export default function MerchantServices() {
       setSuccess('Service updated successfully!');
       setEditingService(null);
       fetchServices();
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to update service. Please try again.');
     }
   };
@@ -152,7 +152,7 @@ export default function MerchantServices() {
 
       setSuccess('Service deleted successfully!');
       fetchServices();
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to delete service. Please try again.');
     }
   };
@@ -169,7 +169,7 @@ export default function MerchantServices() {
     );
   }
 
-  if (!session || session.user?.role !== 'MERCHANT') {
+  if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
     return null;
   }
 

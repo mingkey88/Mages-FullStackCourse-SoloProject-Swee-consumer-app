@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Category, BookingStatus } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -109,58 +109,65 @@ async function main() {
   // Create sample services with tags
   const services = [
     {
-      name: 'Keratin Hair Treatment',
+      title: 'Keratin Hair Treatment',
       description: 'Smoothing treatment for frizzy hair',
-      price: 180,
+      price: 18000,
       duration: 120,
+      category: Category.BEAUTY,
       merchantId: 1,
       tags: ['Frizz Control', 'Damage Repair'],
     },
     {
-      name: 'Volumizing Hair Cut',
+      title: 'Volumizing Hair Cut',
       description: 'Layered cut to add volume to thin hair',
-      price: 80,
+      price: 8000,
       duration: 60,
+      category: Category.BEAUTY,
       merchantId: 1,
       tags: ['Volume Boost', 'Hair Thinning'],
     },
     {
-      name: 'Deep Cleansing Facial',
+      title: 'Deep Cleansing Facial',
       description: 'Purifying facial for acne-prone skin',
-      price: 120,
+      price: 12000,
       duration: 90,
+      category: Category.BEAUTY,
       merchantId: 2,
       tags: ['Acne Treatment', 'Blackhead Removal'],
     },
     {
-      name: 'Anti-Aging Facial',
+      title: 'Anti-Aging Facial',
       description: 'Premium anti-aging treatment with peptides',
-      price: 200,
+      price: 20000,
       duration: 90,
+      category: Category.BEAUTY,
       merchantId: 2,
       tags: ['Anti-Aging', 'Hydration'],
     },
     {
-      name: 'Eyebrow Shaping',
+      title: 'Eyebrow Shaping',
       description: 'Professional eyebrow threading and tinting',
-      price: 45,
+      price: 4500,
       duration: 30,
+      category: Category.BEAUTY,
       merchantId: 3,
       tags: ['Natural Look', 'Professional'],
     },
     {
-      name: 'Lash Extensions',
+      title: 'Lash Extensions',
       description: 'Full set of classic eyelash extensions',
-      price: 150,
+      price: 15000,
       duration: 120,
+      category: Category.BEAUTY,
       merchantId: 3,
       tags: ['Bold & Dramatic', 'Trendy Style'],
     },
     {
-      name: 'Quick Trim',
+      title: 'Quick Trim',
       description: 'Basic haircut and styling',
-      price: 35,
+      price: 3500,
       duration: 30,
+      category: Category.BEAUTY,
       merchantId: 4,
       tags: ['Classic', 'Minimalist'],
     },
@@ -186,6 +193,22 @@ async function main() {
       },
     });
   }
+
+  // Create super admin user for development
+  const superAdmin = await prisma.user.upsert({
+    where: { email: 'dev@swee.sg' },
+    update: {},
+    create: {
+      email: 'dev@swee.sg',
+      name: 'Super Admin (Dev)',
+      role: 'ADMIN',
+      points: 999999,
+      serviceType: 'All Services',
+      budgetRange: 'Unlimited',
+      frequency: 'As needed',
+      lifestyle: 'Developer',
+    },
+  });
 
   // Create a sample user with quiz answers
   const sampleUser = await prisma.user.upsert({
@@ -213,8 +236,8 @@ async function main() {
       userId: sampleUser.id,
       serviceId: 1,
       merchantId: 1,
-      dateTime: new Date('2024-12-20T14:00:00Z'),
-      status: 'COMPLETED',
+      datetime: new Date('2024-12-20T14:00:00Z'),
+      status: BookingStatus.COMPLETED,
       totalAmount: 180,
       notes: 'First time customer',
     },
@@ -222,8 +245,8 @@ async function main() {
       userId: sampleUser.id,
       serviceId: 3,
       merchantId: 2,
-      dateTime: new Date('2024-12-15T10:00:00Z'),
-      status: 'COMPLETED',
+      datetime: new Date('2024-12-15T10:00:00Z'),
+      status: BookingStatus.COMPLETED,
       totalAmount: 120,
       notes: 'Regular customer',
     },
@@ -232,7 +255,7 @@ async function main() {
   console.log('Creating sample bookings...');
   for (const booking of bookings) {
     await prisma.booking.upsert({
-      where: { id: bookings.indexOf(booking) + 1 },
+      where: { id: (bookings.indexOf(booking) + 1).toString() },
       update: {},
       create: {
         ...booking,
@@ -304,6 +327,12 @@ async function main() {
   console.log(`- ${feedback.length} feedback entries`);
   console.log(`- ${pointsTransactions.length} points transactions`);
   console.log(`- 1 sample user with quiz data`);
+  console.log(`- 1 super admin user for development`);
+  console.log('');
+  console.log('🔑 Super Admin Login:');
+  console.log(`   Email: ${superAdmin.email}`);
+  console.log(`   Password: any password (dev mode)`);
+  console.log(`   Role: ${superAdmin.role}`);
 }
 
 main()

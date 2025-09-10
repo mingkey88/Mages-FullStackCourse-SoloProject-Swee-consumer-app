@@ -42,7 +42,7 @@ export default function MerchantProfile() {
   useEffect(() => {
     if (status === 'loading') return;
     
-    if (!session || session.user?.role !== 'MERCHANT') {
+    if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
       router.push('/merchant/auth/signin');
       return;
     }
@@ -116,7 +116,7 @@ export default function MerchantProfile() {
     );
   }
 
-  if (!session || session.user?.role !== 'MERCHANT') {
+  if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
     return null;
   }
 

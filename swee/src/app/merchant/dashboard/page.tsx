@@ -27,8 +27,8 @@ export default function MerchantDashboard() {
       return;
     }
     
-    // Check if user has merchant role
-    if (session.user?.role !== 'MERCHANT') {
+    // Check if user has merchant or admin role
+    if (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN') {
       router.push('/merchant/auth/signup');
       return;
     }
@@ -42,7 +42,7 @@ export default function MerchantDashboard() {
     );
   }
 
-  if (!session || session.user?.role !== 'MERCHANT') {
+  if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
     return null;
   }
 

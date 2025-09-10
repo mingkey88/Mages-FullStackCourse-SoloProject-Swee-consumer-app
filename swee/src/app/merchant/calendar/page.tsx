@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Calendar as CalendarIcon, Clock, User, Mail, CheckCircle, XCircle, AlertCircle, ChevronDown, List, Grid, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Calendar, dateFnsLocalizer, NavigateAction } from 'react-big-calendar';
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay, addMonths, addDays, addWeeks, subMonths, subDays, subWeeks } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -53,6 +53,7 @@ interface Booking {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface CalendarEvent {
   id: string;
   title: string;
@@ -151,7 +152,7 @@ export default function MerchantCalendar() {
   useEffect(() => {
     if (status === 'loading') return;
     
-    if (!session || session.user?.role !== 'MERCHANT') {
+    if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
       router.push('/merchant/auth/signin');
       return;
     }
@@ -244,7 +245,7 @@ export default function MerchantCalendar() {
     );
   }
 
-  if (!session || session.user?.role !== 'MERCHANT') {
+  if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
     return null;
   }
 

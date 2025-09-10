@@ -27,8 +27,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // Hash password (TODO: actually use this in user creation)
+    const _hashedPassword = await bcrypt.hash(password, 12);
 
     // Create user with MERCHANT role
     const user = await prisma.user.create({

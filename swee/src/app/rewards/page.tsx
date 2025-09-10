@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Coins, Trophy, Gift, Star, Calendar, MessageCircle, Target, ArrowRight, Sun, Moon, ArrowLeft, Home } from 'lucide-react';
+import { Coins, Trophy, Gift, Star, Calendar, MessageCircle, Target, ArrowRight, Sun, Moon, ArrowLeft } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import Link from 'next/link';
 

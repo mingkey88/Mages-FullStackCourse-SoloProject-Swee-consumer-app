@@ -52,7 +52,7 @@ export default function MerchantPayments() {
   useEffect(() => {
     if (status === 'loading') return;
     
-    if (!session || session.user?.role !== 'MERCHANT') {
+    if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
       router.push('/merchant/auth/signin');
       return;
     }
@@ -71,7 +71,7 @@ export default function MerchantPayments() {
 
       const data = await response.json();
       setPaymentData(data);
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to load payment data');
     } finally {
       setLoading(false);
@@ -109,7 +109,7 @@ export default function MerchantPayments() {
     );
   }
 
-  if (!session || session.user?.role !== 'MERCHANT') {
+  if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
     return null;
   }
 

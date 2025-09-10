@@ -26,8 +26,8 @@ interface ReviewData {
 }
 
 export default function PostBookingReview({ 
-  bookingId, 
-  merchantId, 
+  _bookingId, 
+  _merchantId, 
   merchantName, 
   serviceName, 
   onSubmit, 

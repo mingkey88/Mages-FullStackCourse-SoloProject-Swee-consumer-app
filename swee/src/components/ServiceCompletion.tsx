@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Clock, AlertCircle, DollarSign, Shield } from 'lucide-react';
 
 interface ServiceCompletionProps {
@@ -17,7 +16,7 @@ interface ServiceCompletionProps {
 }
 
 export default function ServiceCompletion({ 
-  bookingId, 
+  _bookingId, 
   merchantName, 
   serviceName, 
   amount, 

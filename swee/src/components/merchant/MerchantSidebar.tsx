@@ -12,7 +12,6 @@ import {
   ShoppingBag, 
   Calendar, 
   CreditCard, 
-  Settings, 
   LogOut,
   Menu,
   X,
@@ -53,7 +52,7 @@ export default function MerchantSidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  if (!session || session.user?.role !== 'MERCHANT') {
+  if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
     return null;
   }
 

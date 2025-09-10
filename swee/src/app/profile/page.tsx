@@ -62,7 +62,7 @@ export default function ProfilePage() {
     workAddress: '456 Orchard Road, Singapore 238863'
   });
 
-  const [paymentMethods, setPaymentMethods] = useState([
+  const [paymentMethods, _setPaymentMethods] = useState([
     { id: 1, type: 'Credit Card', last4: '4532', brand: 'Visa', isDefault: true },
     { id: 2, type: 'Credit Card', last4: '8901', brand: 'Mastercard', isDefault: false },
     { id: 3, type: 'Digital Wallet', last4: '', brand: 'PayNow', isDefault: false }

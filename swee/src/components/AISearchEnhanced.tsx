@@ -3,26 +3,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+// Removed unused Card components
 import { Badge } from '@/components/ui/badge';
 import { 
   Bot, 
   User, 
   Send, 
   Sparkles, 
-  MapPin, 
-  Clock, 
-  DollarSign,
-  Star,
   X,
   Minimize2,
-  Shield,
   Award,
   Loader2
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useTheme } from '@/contexts/ThemeContext';
-import Link from 'next/link';
+// Removed unused Link import
 
 interface AIMessage {
   id: string;
@@ -51,7 +46,7 @@ export default function AISearchEnhanced({ onClose }: AISearchEnhancedProps) {
   const [currentInput, setCurrentInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [userContext, setUserContext] = useState<UserContext | null>(null);
-  const [proactiveSuggestions, setProactiveSuggestions] = useState<string[]>([]);
+  // Removed unused proactiveSuggestions state
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom
@@ -188,7 +183,7 @@ export default function AISearchEnhanced({ onClose }: AISearchEnhancedProps) {
     }
   };
 
-  const generateContextualSuggestions = (response: string, suggestedActions?: any[]): string[] => {
+  const generateContextualSuggestions = (response: string, _suggestedActions?: any[]): string[] => {
     const suggestions: string[] = [];
     
     if (response.toLowerCase().includes('trust score')) {

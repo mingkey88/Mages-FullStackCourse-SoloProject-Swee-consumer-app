@@ -36,16 +36,16 @@ export default function MerchantSignIn() {
         return;
       }
 
-      // Check if user is a merchant
+      // Check if user is a merchant or admin
       const session = await getSession();
-      if (session?.user?.role !== 'MERCHANT') {
+      if (session?.user?.role !== 'MERCHANT' && session?.user?.role !== 'ADMIN') {
         setError('Access denied. Merchant account required.');
         setLoading(false);
         return;
       }
 
       router.push('/merchant/dashboard');
-    } catch (err) {
+    } catch (_err) {
       setError('Something went wrong. Please try again.');
       setLoading(false);
     }

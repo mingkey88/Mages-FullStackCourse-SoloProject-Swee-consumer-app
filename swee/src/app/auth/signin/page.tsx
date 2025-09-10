@@ -109,7 +109,7 @@ export default function SignInPage() {
           router.push(callbackUrl);
         }
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Sign in failed. Please try again.');
     } finally {
       setIsLoading(false);
@@ -135,7 +135,7 @@ export default function SignInPage() {
           router.push(callbackUrl);
         }
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Sign in failed. Please try again.');
     } finally {
       setIsLoading(false);
@@ -150,7 +150,7 @@ export default function SignInPage() {
       await signIn(providerId, {
         callbackUrl,
       });
-    } catch (err) {
+    } catch (_err) {
       setError('An error occurred during sign in. Please try again.');
       setIsLoading(false);
     }

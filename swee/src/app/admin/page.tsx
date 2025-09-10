@@ -33,7 +33,7 @@ interface HardSellMetrics {
 export default function AdminDashboard() {
   const [metrics, setMetrics] = useState<HardSellMetrics | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [_error, setError] = useState(''); // TODO: Display error in UI
 
   useEffect(() => {
     fetchMetrics();
