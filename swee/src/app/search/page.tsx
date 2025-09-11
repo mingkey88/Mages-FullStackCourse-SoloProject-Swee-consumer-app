@@ -55,7 +55,7 @@ interface ServiceProvider {
 const mockProviders: ServiceProvider[] = [
   {
     id: '1',
-    name: 'Bella Beauty Studio',
+    name: 'Bella Beauty Studio (demo)',
     category: 'Hair & Beauty',
     rating: 4.8,
     reviewCount: 324,
@@ -73,7 +73,7 @@ const mockProviders: ServiceProvider[] = [
   },
   {
     id: 'hair-lounge-singapore',
-    name: 'The Hair Lounge',
+    name: 'The Hair Lounge (demo)',
     category: 'Hair & Beauty',
     rating: 4.8,
     reviewCount: 324,
@@ -89,7 +89,7 @@ const mockProviders: ServiceProvider[] = [
   },
   {
     id: 'zen-wellness-spa',
-    name: 'Zen Wellness Spa',
+    name: 'Zen Wellness Spa (demo)',
     category: 'Massage & Spa',
     rating: 4.9,
     reviewCount: 456,
@@ -105,7 +105,7 @@ const mockProviders: ServiceProvider[] = [
   },
   {
     id: 'perfect-nails-studio',
-    name: 'Perfect Nails Studio',
+    name: 'Perfect Nails Studio (demo)',
     category: 'Nails',
     rating: 4.7,
     reviewCount: 289,
@@ -121,7 +121,7 @@ const mockProviders: ServiceProvider[] = [
   },
   {
     id: 'fit-zone-gym',
-    name: 'FitZone Personal Training',
+    name: 'FitZone Personal Training (demo)',
     category: 'Fitness',
     rating: 4.6,
     reviewCount: 167,
@@ -137,7 +137,7 @@ const mockProviders: ServiceProvider[] = [
   },
   {
     id: 'glow-skincare-clinic',
-    name: 'Glow Skincare Clinic',
+    name: 'Glow Skincare Clinic (demo)',
     category: 'Skincare',
     rating: 4.9,
     reviewCount: 412,
@@ -153,7 +153,7 @@ const mockProviders: ServiceProvider[] = [
   },
   {
     id: 'bliss-massage-therapy',
-    name: 'Bliss Massage Therapy',
+    name: 'Bliss Massage Therapy (demo)',
     category: 'Massage & Spa',
     rating: 4.5,
     reviewCount: 203,
@@ -169,7 +169,7 @@ const mockProviders: ServiceProvider[] = [
   },
   {
     id: 'urban-cuts-barbershop',
-    name: 'Urban Cuts Barbershop',
+    name: 'Urban Cuts Barbershop (demo)',
     category: 'Hair & Beauty',
     rating: 4.6,
     reviewCount: 156,
@@ -185,7 +185,7 @@ const mockProviders: ServiceProvider[] = [
   },
   {
     id: 'pure-yoga-studio',
-    name: 'Pure Yoga Studio',
+    name: 'Pure Yoga Studio (demo)',
     category: 'Fitness',
     rating: 4.4,
     reviewCount: 98,
@@ -201,7 +201,7 @@ const mockProviders: ServiceProvider[] = [
   },
   {
     id: 'luxe-beauty-bar',
-    name: 'Luxe Beauty Bar',
+    name: 'Luxe Beauty Bar (demo)',
     category: 'Hair & Beauty',
     rating: 4.8,
     reviewCount: 267,
@@ -217,7 +217,7 @@ const mockProviders: ServiceProvider[] = [
   },
   {
     id: 'serenity-wellness-center',
-    name: 'Serenity Wellness Center',
+    name: 'Serenity Wellness Center (demo)',
     category: 'Health & Wellness',
     rating: 4.7,
     reviewCount: 189,
@@ -608,9 +608,12 @@ export default function SearchPage() {
                   <div className="space-y-3">
                     {/* Header */}
                     <div>
-                      <h3 className="font-semibold text-lg group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors text-gray-900 dark:text-white">
-                        {provider.name}
-                      </h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold text-lg group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors text-gray-900 dark:text-white">
+                          {provider.name}
+                        </h3>
+                        <Badge variant="secondary" className="text-[10px] uppercase tracking-wide">Demo</Badge>
+                      </div>
                       <p className="text-sm text-gray-600 dark:text-gray-300">{provider.category}</p>
                     </div>
 

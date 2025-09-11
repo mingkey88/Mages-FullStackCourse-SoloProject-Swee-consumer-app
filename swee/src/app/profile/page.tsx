@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -44,16 +45,17 @@ import {
 import Link from 'next/link';
 
 export default function ProfilePage() {
+  const { data: session } = useSession();
   const searchParams = useSearchParams();
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [activeSection, setActiveSection] = useState('profile');
   const [profileData, setProfileData] = useState({
-    firstName: 'Bella',
-    lastName: 'Chen',
-    email: 'bella.chen@example.com',
-    phone: '+65 9123 4567',
-    birthday: '1995-03-15',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    birthday: '1990-01-01',
     profileImage: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80'
   });
 
@@ -80,6 +82,20 @@ export default function ProfilePage() {
       }
     }
   }, [searchParams]);
+
+  // Initialize profile from session user
+  useEffect(() => {
+    if (!session?.user) return;
+    const fullName = session.user.name || '';
+    const [firstName, ...rest] = fullName.split(' ');
+    const lastName = rest.join(' ');
+    setProfileData(prev => ({
+      ...prev,
+      firstName: firstName || prev.firstName,
+      lastName: lastName || prev.lastName,
+      email: session.user.email || prev.email,
+    }));
+  }, [session]);
 
   const handleSave = () => {
     console.log('Saving profile data:', profileData);
@@ -128,7 +144,7 @@ export default function ProfilePage() {
       {/* Profile Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Good evening, {profileData.firstName}!</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Good evening, {profileData.firstName || 'there'}!</h1>
           <p className="text-gray-400">Here&apos;s your profile information</p>
         </div>
         <div className="flex space-x-3">
@@ -239,7 +255,7 @@ export default function ProfilePage() {
                     className="bg-gray-700 border-gray-600 text-white"
                   />
                 ) : (
-                  <p className="text-gray-400 py-2">{profileData.firstName}</p>
+                <p className="text-gray-400 py-2">{profileData.firstName || '—'}</p>
                 )}
               </div>
 
@@ -255,7 +271,7 @@ export default function ProfilePage() {
                     className="bg-gray-700 border-gray-600 text-white"
                   />
                 ) : (
-                  <p className="text-gray-400 py-2">{profileData.lastName}</p>
+                  <p className="text-gray-400 py-2">{profileData.lastName || '—'}</p>
                 )}
               </div>
             </div>
@@ -273,7 +289,7 @@ export default function ProfilePage() {
                   className="bg-gray-700 border-gray-600 text-white"
                 />
               ) : (
-                <p className="text-gray-400 py-2">{profileData.email}</p>
+                <p className="text-gray-400 py-2">{profileData.email || '—'}</p>
               )}
             </div>
 
@@ -290,7 +306,7 @@ export default function ProfilePage() {
                   className="bg-gray-700 border-gray-600 text-white"
                 />
               ) : (
-                <p className="text-gray-400 py-2">{profileData.phone}</p>
+                <p className="text-gray-400 py-2">{profileData.phone || '—'}</p>
               )}
             </div>
 
@@ -308,7 +324,7 @@ export default function ProfilePage() {
                 />
               ) : (
                 <p className="text-gray-400 py-2">
-                  {new Date(profileData.birthday).toLocaleDateString()}
+                  {profileData.birthday ? new Date(profileData.birthday).toLocaleDateString() : '—'}
                 </p>
               )}
             </div>

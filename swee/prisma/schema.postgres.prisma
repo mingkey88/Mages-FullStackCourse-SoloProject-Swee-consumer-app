@@ -1,0 +1,266 @@
+// Prisma schema for Postgres deployments (Vercel + Supabase)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  MERCHANT
+  ADMIN
+}
+
+enum Category {
+  BEAUTY
+  WELLNESS
+  FITNESS
+  HEALTHCARE
+  AUTOMOTIVE
+  HOME_SERVICES
+  EDUCATION
+  ENTERTAINMENT
+  OTHER
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String?   @unique
+  name          String?
+  role          Role      @default(USER)
+  image         String?
+  points        Int       @default(0)
+  serviceType   String?
+  hairConcerns  Json?
+  facialConcerns Json?
+  browsLashesStyle String?
+  budgetRange   String?
+  frequency     String?
+  lifestyle     String?
+  availability  Json?
+  hardSellingExperience String?
+  hardSellingProtection String?
+  accounts      Account[]
+  sessions      Session[]
+  bookings      Booking[]
+  merchants     Merchant[]
+  quizAnswers   QuizAnswer[]
+  hardSellReports HardSellReport[]
+  pointsHistory PointsTransaction[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("users")
+}
+
+model Merchant {
+  id           Int       @id @default(autoincrement())
+  name         String
+  description  String?
+  address      String?
+  phone        String?
+  email        String?
+  website      String?
+  owner        User      @relation(fields: [ownerId], references: [id])
+  ownerId      String
+  services     Service[]
+  appointments Booking[]
+  trustScore   Float     @default(100.0)
+  hardSellReports HardSellReport[]
+  pendingPayouts  PendingPayout[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("merchants")
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  price       Int
+  duration    Int?
+  category    Category
+  isActive    Boolean  @default(true)
+  tags        ServiceTag[]
+  merchant    Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  merchantId  Int
+  bookings    Booking[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("services")
+}
+
+model Booking {
+  id        String        @id @default(cuid())
+  datetime  DateTime
+  status    BookingStatus @default(PENDING)
+  notes     String?
+  totalAmount Float?
+  currency    String      @default("SGD")
+  user      User          @relation(fields: [userId], references: [id])
+  userId    String
+  service   Service       @relation(fields: [serviceId], references: [id])
+  serviceId Int
+  merchant  Merchant      @relation(fields: [merchantId], references: [id])
+  merchantId Int
+  feedback  Feedback?
+  hardSellReports HardSellReport[]
+  pendingPayment  PendingPayment?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("bookings")
+}
+
+model Feedback {
+  id               Int     @id @default(autoincrement())
+  rating           Int
+  comment          String?
+  hardSellReported Boolean @default(false)
+  booking          Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId        String  @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("feedback")
+}
+
+model QuizAnswer {
+  id            Int      @id @default(autoincrement())
+  email         String
+  questionId    String
+  answer        String
+  aiSummary     String?
+  user          User?    @relation(fields: [userId], references: [id])
+  userId        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("quiz_answers")
+}
+
+model PointsTransaction {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  points      Int
+  reason      String
+  description String?
+  createdAt   DateTime @default(now())
+
+  @@map("points_transactions")
+}
+
+model HardSellReport {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  merchant   Merchant @relation(fields: [merchantId], references: [id])
+  merchantId Int
+  booking    Booking  @relation(fields: [bookingId], references: [id])
+  bookingId  String
+  reported   Boolean
+  note       String?
+  createdAt  DateTime @default(now())
+
+  @@map("hard_sell_reports")
+}
+
+model PendingPayment {
+  id           String        @id @default(cuid())
+  booking      Booking       @relation(fields: [bookingId], references: [id])
+  bookingId    String        @unique
+  amount       Float
+  currency     String        @default("SGD")
+  paymentMethod String
+  stripePaymentId String?
+  status       PaymentStatus @default(PENDING)
+  createdAt    DateTime      @default(now())
+  releasedAt   DateTime?
+
+  @@map("pending_payments")
+}
+
+model PendingPayout {
+  id         String   @id @default(cuid())
+  merchant   Merchant @relation(fields: [merchantId], references: [id])
+  merchantId Int
+  amount     Float
+  currency   String   @default("SGD")
+  status     String   @default("pending")
+  createdAt  DateTime @default(now())
+  processedAt DateTime?
+
+  @@map("pending_payouts")
+}
+
+model ServiceTag {
+  id       String @id @default(cuid())
+  name     String @unique
+  category String
+  services Service[]
+
+  @@map("service_tags")
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  RELEASED
+  REFUNDED
+  FAILED
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+

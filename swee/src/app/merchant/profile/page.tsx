@@ -132,7 +132,7 @@ export default function MerchantProfile() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                  {profile?.name || 'Bella Chen'}
+                  {profile?.name || session?.user?.name || 'Business Owner'}
                 </h2>
                 <p className="text-sm text-gray-600 dark:text-gray-300">Business Owner</p>
               </div>

@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsx:*)",
+      "Bash(npm audit fix:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run lint:*)",
+      "Bash(find:*)",
+      "Bash(npm run build:*)",
+      "Bash(sed:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run db:test:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(npm run:*)",
+      "Bash(node:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
