@@ -1,112 +1,72 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+  const merchantId = Number(params.id);
+  if (isNaN(merchantId)) {
+    return NextResponse.json({ error: 'Invalid merchant id' }, { status: 400 });
+  }
   try {
-    const { id } = await params;
-    const merchantId = parseInt(id);
-    
-    if (isNaN(merchantId)) {
-      return NextResponse.json(
-        { error: 'Invalid merchant ID' },
-        { status: 400 }
-      );
-    }
-
-    // Fetch merchant with related data
+    // Fetch merchant and related services
     const merchant = await prisma.merchant.findUnique({
       where: { id: merchantId },
       include: {
-        services: {
-          where: { isActive: true },
-          include: {
-            tags: true,
-          },
-        },
-        appointments: {
-          where: { 
-            status: 'COMPLETED',
-          },
-          include: {
-            user: {
-              select: { name: true, email: true },
-            },
-            service: {
-              select: { title: true },
-            },
-            feedback: true,
-          },
-          orderBy: { createdAt: 'desc' },
-          take: 10,
-        },
-        owner: {
-          select: { name: true, email: true },
-        },
+        services: true,
       },
     });
-
     if (!merchant) {
-      return NextResponse.json(
-        { error: 'Merchant not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Merchant not found' }, { status: 404 });
     }
-
-    // Calculate average rating from feedback
-    const feedbacks = merchant.appointments
-      .map(appointment => appointment.feedback)
-      .filter(feedback => feedback !== null);
-    
-    const averageRating = feedbacks.length > 0 
-      ? feedbacks.reduce((sum, feedback) => sum + feedback!.rating, 0) / feedbacks.length
+    // Fetch feedbacks for this merchant via bookings
+    const bookings = await prisma.booking.findMany({
+      where: { merchantId },
+      include: { feedback: true, service: true, user: true },
+    });
+    const feedbacks = bookings
+      .map(b => b.feedback)
+      .filter(fb => fb !== null);
+    const averageRating = feedbacks.length > 0
+      ? feedbacks.reduce((sum, fb) => sum + (fb?.rating ?? 0), 0) / feedbacks.length
       : 0;
-
-    // Format the response
+    // Format reviews
+    const reviews = feedbacks.map((fb, i) => ({
+      id: fb!.id,
+      user: {
+        name: bookings[i].user.name ?? 'Anonymous',
+        initial: bookings[i].user.name ? bookings[i].user.name[0] : 'A',
+      },
+      rating: fb!.rating,
+      comment: fb!.comment ?? '',
+      date: fb!.createdAt,
+      service: bookings[i].service.title,
+    }));
+    // Format services
+    const services = merchant.services.map(s => ({
+      id: s.id,
+      title: s.title,
+      description: s.description,
+      duration: s.duration ?? 0,
+      price: s.price,
+      category: s.category,
+      tags: [], // Add tags if needed
+    }));
     const response = {
       id: merchant.id,
       name: merchant.name,
-      description: merchant.description,
-      address: merchant.address,
-      phone: merchant.phone,
-      email: merchant.email,
-      website: merchant.website,
-      trustScore: merchant.trustScore,
-      averageRating: Math.round(averageRating * 10) / 10,
-      reviewCount: feedbacks.length,
-      services: merchant.services.map(service => ({
-        id: service.id,
-        title: service.title,
-        description: service.description,
-        price: service.price,
-        duration: service.duration,
-        category: service.category,
-        tags: service.tags.map(tag => tag.name),
-      })),
-      reviews: merchant.appointments
-        .filter(appointment => appointment.feedback)
-        .map(appointment => ({
-          id: appointment.id,
-          user: {
-            name: appointment.user.name || 'Anonymous',
-            initial: (appointment.user.name || 'A').charAt(0),
-          },
-          rating: appointment.feedback!.rating,
-          comment: appointment.feedback!.comment,
-          date: appointment.createdAt,
-          service: appointment.service?.title || 'Unknown Service',
-        }))
-        .slice(0, 5),
+      description: merchant.description ?? '',
+      address: merchant.address ?? '',
+      phone: merchant.phone ?? '',
+      email: merchant.email ?? '',
+      website: merchant.website ?? '',
+      trustScore: merchant.trustScore ?? 0,
+      averageRating,
+      reviewCount: reviews.length,
+      services,
+      reviews,
     };
-
     return NextResponse.json(response);
-  } catch (error) {
-    console.error('Error fetching merchant:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+  } catch (err) {
+    console.error('API error:', err);
+    return NextResponse.json({ error: 'Internal server error', details: String(err) }, { status: 500 });
   }
 }
