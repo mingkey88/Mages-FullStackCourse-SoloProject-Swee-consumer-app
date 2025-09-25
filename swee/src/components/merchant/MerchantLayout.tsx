@@ -28,7 +28,7 @@ export default function MerchantLayout({ children }: MerchantLayoutProps) {
       return;
     }
     
-    if (session.user?.role !== 'MERCHANT') {
+    if (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN') {
       router.push('/merchant/auth/signin');
       return;
     }
@@ -55,7 +55,7 @@ export default function MerchantLayout({ children }: MerchantLayoutProps) {
   }
 
   // For non-auth pages, require merchant authentication
-  if (!session || session.user?.role !== 'MERCHANT') {
+  if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
     return null;
   }
 

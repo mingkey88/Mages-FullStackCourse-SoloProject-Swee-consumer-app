@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "buildCommand": "npm run db:generate:pg && npm run db:push:pg && npm run build",
+  "installCommand": "npm install",
+  "framework": "nextjs"
+}
+

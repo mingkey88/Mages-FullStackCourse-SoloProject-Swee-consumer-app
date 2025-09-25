@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, ArrowRight, CheckCircle, Loader2, Sun, Moon, Home } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, Loader2, Sun, Moon } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import Link from 'next/link';
 

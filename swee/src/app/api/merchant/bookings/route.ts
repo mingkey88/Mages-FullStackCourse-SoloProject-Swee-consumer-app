@@ -1,22 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { prisma } from '@/lib/prisma';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session || session.user?.role !== 'MERCHANT') {
+    if (!session || (session.user?.role !== 'MERCHANT' && session.user?.role !== 'ADMIN')) {
       return NextResponse.json(
         { message: 'Unauthorized' },
         { status: 401 }
       );
     }
 
-    const merchant = await prisma.merchant.findFirst({
-      where: { ownerId: session.user.id }
-    });
+    // For admin users, get the first merchant (for development access)
+    // For merchant users, get their own merchant profile
+    const merchant = session.user.role === 'ADMIN' 
+      ? await prisma.merchant.findFirst()
+      : await prisma.merchant.findFirst({
+          where: { ownerId: session.user.id }
+        });
 
     if (!merchant) {
       return NextResponse.json(
@@ -28,7 +32,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const date = searchParams.get('date');
 
-    let whereClause: any = { merchantId: merchant.id };
+    const whereClause: any = { merchantId: merchant.id };
     
     if (date) {
       const startDate = new Date(date);

@@ -1,11 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Star, MapPin, Clock, DollarSign, Heart, Navigation, Plus, Minus } from 'lucide-react';
-import TrustScore from '@/components/TrustScore';
+import { Star, Navigation, Plus, Minus } from 'lucide-react';
 
 interface ServiceProvider {
   id: string;
@@ -129,7 +126,7 @@ export default function MapView({ providers, selectedProvider, onProviderSelect 
       </div>
 
       {/* Provider Markers */}
-      {dummyMarkers.map((marker, index) => {
+      {dummyMarkers.map((marker, _index) => {
         const isSelected = selectedProvider?.id === marker.provider.id;
         
         return (

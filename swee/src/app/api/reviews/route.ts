@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 import { z } from 'zod';
 
 const reviewSchema = z.object({
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the review/feedback
-    const feedback = await prisma.feedback.create({
+    const _feedback = await prisma.feedback.create({
       data: {
         bookingId,
         rating,

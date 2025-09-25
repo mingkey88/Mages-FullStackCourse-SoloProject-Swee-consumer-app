@@ -23,7 +23,7 @@ export function useAdmin() {
         const userData = JSON.parse(adminUserData);
         setIsAdmin(true);
         setAdminUser(userData);
-      } catch (error) {
+      } catch (_error) {
         // Clear invalid admin data
         localStorage.removeItem('adminAccess');
         localStorage.removeItem('adminUser');

@@ -5,11 +5,11 @@ export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const query = url.searchParams.get('query') || '';
-    const category = url.searchParams.get('category') || '';
+    const _category = url.searchParams.get('category') || '';
     const location = url.searchParams.get('location') || '';
 
     // Build search conditions
-    let whereClause: any = {};
+    const whereClause: any = {};
     
     if (query) {
       whereClause.OR = [

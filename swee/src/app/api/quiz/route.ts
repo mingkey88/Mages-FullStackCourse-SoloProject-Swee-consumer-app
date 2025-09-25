@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 
 // Quiz questions data - Swee's Intelligent Onboarding
 const QUIZ_QUESTIONS = [
@@ -190,7 +190,7 @@ export async function POST(request: NextRequest) {
 
     // If user is authenticated, update their profile with quiz answers
     if (session?.user?.id) {
-      const userProfile = generateUserProfile(answers);
+      const _userProfile = generateUserProfile(answers);
       
       await prisma.user.update({
         where: { id: session.user.id },

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     
@@ -55,12 +55,12 @@ export async function GET(request: NextRequest) {
 }
 
 async function generateRecommendations(user: any) {
-  const recommendations = [];
+  const _recommendations = [];
 
   // Parse user concerns
-  const hairConcerns = user.hairConcerns ? JSON.parse(user.hairConcerns) : [];
-  const facialConcerns = user.facialConcerns ? JSON.parse(user.facialConcerns) : [];
-  const availability = user.availability ? JSON.parse(user.availability) : [];
+  const _hairConcerns = user.hairConcerns ? JSON.parse(user.hairConcerns) : [];
+  const _facialConcerns = user.facialConcerns ? JSON.parse(user.facialConcerns) : [];
+  const _availability = user.availability ? JSON.parse(user.availability) : [];
 
   // Get budget range
   const budgetRange = parseBudgetRange(user.budgetRange);
