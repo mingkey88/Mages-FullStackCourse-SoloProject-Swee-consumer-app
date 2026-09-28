@@ -4,7 +4,7 @@ Thanks for helping improve Swee. This guide reflects the current Next.js + Prism
 
 ## Setup
 - Node 20 LTS recommended. Use `npm` (pnpm works but README uses npm).
-- From `swee/`: `npm install` then configure `.env.local` (see `DATABASE_MIGRATION.md` for `DATABASE_URL`).
+- From `swee/`: `npm ci` then `cp .env.example .env` (see `DATABASE_MIGRATION.md` for `DATABASE_URL`).
 - Initialize DB: `npm run db:push && npm run db:generate && npm run db:seed`.
 
 ## Workflow

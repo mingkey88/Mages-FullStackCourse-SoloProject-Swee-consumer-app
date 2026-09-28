@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,7 +26,7 @@ const errorMessages = {
   },
 };
 
-export default function AuthErrorPage() {
+function AuthErrorPageContent() {
   const searchParams = useSearchParams();
   const errorType = searchParams.get('error') || 'Default';
   
@@ -70,5 +71,14 @@ export default function AuthErrorPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+// useSearchParams() needs a Suspense boundary so Next.js can prerender this page.
+export default function AuthErrorPage() {
+  return (
+    <Suspense>
+      <AuthErrorPageContent />
+    </Suspense>
   );
 }

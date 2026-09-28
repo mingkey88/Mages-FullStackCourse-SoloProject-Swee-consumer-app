@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import type { Category } from '@prisma/client';
 
 export async function GET(_request: NextRequest) {
   try {
@@ -58,8 +59,8 @@ async function generateRecommendations(user: any) {
   const _recommendations = [];
 
   // Parse user concerns
-  const _hairConcerns = user.hairConcerns ? JSON.parse(user.hairConcerns) : [];
-  const _facialConcerns = user.facialConcerns ? JSON.parse(user.facialConcerns) : [];
+  const hairConcerns = user.hairConcerns ? JSON.parse(user.hairConcerns) : [];
+  const facialConcerns = user.facialConcerns ? JSON.parse(user.facialConcerns) : [];
   const _availability = user.availability ? JSON.parse(user.availability) : [];
 
   // Get budget range
@@ -189,7 +190,7 @@ async function generateRecommendations(user: any) {
   return topRecommendations;
 }
 
-function getServiceCategories(serviceType: string | null) {
+function getServiceCategories(serviceType: string | null): Category[] {
   switch (serviceType) {
     case 'Hair Services':
       return ['BEAUTY'];

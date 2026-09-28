@@ -39,7 +39,7 @@ export default function MerchantServices() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
-  const [_editingService, _setEditingService] = useState<Service | null>(null);
+  const [_editingService, setEditingService] = useState<Service | null>(null);
   const [newService, setNewService] = useState({
     title: '',
     description: '',

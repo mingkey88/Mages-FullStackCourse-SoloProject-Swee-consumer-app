@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -47,7 +47,7 @@ interface BookingDetails {
   price: string;
 }
 
-export default function BookingConfirmPage() {
+function BookingConfirmPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [confirmed, setConfirmed] = useState(false);
@@ -378,5 +378,14 @@ export default function BookingConfirmPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// useSearchParams() needs a Suspense boundary so Next.js can prerender this page.
+export default function BookingConfirmPage() {
+  return (
+    <Suspense>
+      <BookingConfirmPageContent />
+    </Suspense>
   );
 }

@@ -14,7 +14,7 @@ cd swee
 npm install
 
 # Environment setup
-cp .env.example .env.local
+cp .env.example .env  # Prisma reads .env, not .env.local
 
 # Database setup
 npm run db:generate
@@ -34,7 +34,7 @@ npm run lint       # Code quality check
 
 ### Merchant Portal
 Visit: http://localhost:3000/merchant/auth/signin
-Demo login: `merchant@example.com` / `password123`
+Demo login: `info@hairstudio.sg` / any password
 
 ## 🎯 Platform Overview
 

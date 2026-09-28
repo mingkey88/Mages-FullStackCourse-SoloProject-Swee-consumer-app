@@ -17,11 +17,10 @@ Swee is a trust‑first beauty & wellness marketplace with a merchant OS. The ap
 - Scripts: `swee/scripts/*` (admin bootstrap, auth fixes, migrations, demo data).
 
 ## Run Locally (Dev: SQLite)
-- `cd swee && npm install`
-- `npm run db:push && npm run db:generate && npm run db:seed`
-- Create the super admin and merchant data: `npm run dev:create-admin && npm run dev:create-merchant`
-- Start: `npm run dev` (Turbopack). App default: `http://localhost:3002`
-- Sign‑in (dev credentials provider accepts any password): `dev@swee.sg`
+- `cd swee && npm ci && cp .env.example .env` (the default `.env` uses the bundled demo database, which is already seeded)
+- Optional, to rebuild demo data in a new database (`DATABASE_URL="file:./dev.db"`): `npm run db:push && npm run db:seed && npm run dev:create-admin && npm run dev:create-merchant && npm run dev:seed-demo`
+- Start: `npm run dev` (Turbopack). App default: `http://localhost:3000`
+- Sign‑in (dev credentials provider accepts any password): customer `user@example.com`, merchant `info@hairstudio.sg`, admin `dev@swee.sg`. See `swee/README.md` for the full table.
 
 ## Environment Variables
 See `swee/.env.example`. Common:

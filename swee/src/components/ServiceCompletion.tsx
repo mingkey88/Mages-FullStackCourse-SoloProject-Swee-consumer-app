@@ -15,9 +15,8 @@ interface ServiceCompletionProps {
   onClose: () => void;
 }
 
-export default function ServiceCompletion({ 
-  _bookingId, 
-  merchantName, 
+export default function ServiceCompletion({
+  merchantName,
   serviceName, 
   amount, 
   currency, 

@@ -9,11 +9,28 @@ Swee is a modern, consumer-focused booking platform that connects users with tru
 ```bash
 git clone <repository-url>
 cd swee
-npm install
+npm ci                     # installs the exact locked dependency versions
+cp .env.example .env       # points at the bundled demo database
 npm run dev
 ```
 
-Visit http://localhost:3000 to get started.
+Visit http://localhost:3000 to get started. The bundled SQLite database (`prisma/prisma/dev.db`) already has demo merchants, services and the test accounts below, so no seeding is needed.
+
+To rebuild the demo data in a new database, set `DATABASE_URL="file:./dev.db"` in `.env`, then run:
+
+```bash
+npm run db:push && npm run db:seed && npm run dev:create-admin && npm run dev:create-merchant && npm run dev:seed-demo
+```
+
+### Test accounts
+
+The dev sign-in accepts **any password** (demo only — not secure).
+
+| Role | Email | Sign in at |
+|---|---|---|
+| Customer | `user@example.com` | `/auth/signin` |
+| Merchant (The Hair Studio) | `info@hairstudio.sg` | `/merchant/auth/signin` |
+| Admin (owns the "(demo)" merchants) | `dev@swee.sg` | `/auth/signin` |
 
 **For complete documentation, setup instructions, and development guide, see [CLAUDE.md](./CLAUDE.md)**
 
@@ -44,7 +61,7 @@ Visit http://localhost:3000 to get started.
 
 ### Merchant Portal
 Visit: http://localhost:3000/merchant/auth/signin
-Demo login: `merchant@example.com` / `password123`
+Demo login: `info@hairstudio.sg` / any password
 
 - **Dashboard**: Business KPIs and analytics
 - **Services**: CRUD management interface

@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const merchantId = Number(params.id);
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const merchantId = Number(id);
   if (isNaN(merchantId)) {
     return NextResponse.json({ error: 'Invalid merchant id' }, { status: 400 });
   }

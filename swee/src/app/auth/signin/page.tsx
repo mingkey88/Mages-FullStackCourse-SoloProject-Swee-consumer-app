@@ -2,7 +2,7 @@
 
 import { signIn, getProviders, getSession } from 'next-auth/react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,7 +21,7 @@ interface Provider {
   callbackUrl: string;
 }
 
-export default function SignInPage() {
+function SignInPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [providers, setProviders] = useState<Record<string, Provider>>({});
@@ -318,5 +318,14 @@ export default function SignInPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+// useSearchParams() needs a Suspense boundary so Next.js can prerender this page.
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInPageContent />
+    </Suspense>
   );
 }

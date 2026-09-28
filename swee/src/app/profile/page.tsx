@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -44,7 +44,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function ProfilePage() {
+function ProfilePageContent() {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
   const [isEditing, setIsEditing] = useState(false);
@@ -911,5 +911,14 @@ export default function ProfilePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// useSearchParams() needs a Suspense boundary so Next.js can prerender this page.
+export default function ProfilePage() {
+  return (
+    <Suspense>
+      <ProfilePageContent />
+    </Suspense>
   );
 }

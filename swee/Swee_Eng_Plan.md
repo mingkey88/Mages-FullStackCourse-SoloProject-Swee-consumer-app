@@ -25,7 +25,7 @@ cd swee
 npm install
 npm run db:push && npm run db:generate && npm run db:seed
 npm run dev:create-admin && npm run dev:create-merchant  # convenience
-npm run dev  # http://localhost:3002
+npm run dev  # http://localhost:3000
 ```
 Sign-in (dev credentials provider accepts any password): `dev@swee.sg`.
 

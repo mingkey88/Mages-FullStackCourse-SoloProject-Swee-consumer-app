@@ -25,10 +25,8 @@ interface ReviewData {
   hardSellNote?: string;
 }
 
-export default function PostBookingReview({ 
-  _bookingId, 
-  _merchantId, 
-  merchantName, 
+export default function PostBookingReview({
+  merchantName,
   serviceName, 
   onSubmit, 
   onClose 

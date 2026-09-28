@@ -68,7 +68,6 @@ export default function AISearchEnhanced({ onClose }: AISearchEnhancedProps) {
       if (suggestionsResponse.ok) {
         const data = await suggestionsResponse.json();
         if (data.success) {
-          setProactiveSuggestions(data.suggestions);
           setUserContext(data.userContext);
           
           // Create initial greeting

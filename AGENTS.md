@@ -34,6 +34,6 @@ Run all commands from `swee/`.
 - PRs must include: scope/summary, screenshots for UI, DB changes (and Prisma commands run), env var updates, and a clear test plan. Link related issues.
 
 ## Security & Configuration Tips
-- Use `.env.local` (not committed). Common vars: `DATABASE_URL`, `NEXTAUTH_URL`, `NEXTAUTH_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `OPENAI_API_KEY`, and Stripe keys if enabled.
+- Use `.env` (not committed; copy from `swee/.env.example`). Prisma only reads `.env`, not `.env.local`. Common vars: `DATABASE_URL`, `NEXTAUTH_URL`, `NEXTAUTH_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `OPENAI_API_KEY`, and Stripe keys if enabled.
 - After schema changes: `npm run db:generate` and `npm run db:push` (or `db:migrate`) and include notes in the PR.
 
